@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Template</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        form {
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+        form select,
+        form input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        form button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #218838;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .close-btn::before {
+            content: "\00d7"; /* Unicode for cross (×) */
+        }
+    </style>
+    <script src="https://cdn.tiny.cloud/1/ttq6ydbuh9xpr8knpqb3vy5o3e442u75xcoms2aky4m5mq51/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+</head>
+
+<body>
+    <h1>Edit Template</h1>
+    <button class="close-btn" onclick="window.location.href='/'"></button>
+    <form action="{{ url_for('update_template', template_id=template.id) }}" method="post">
+        <label for="subject_line">Subject Line</label>
+        <input type="text" id="subject_line" name="subject_line" value="{{ template.subject_line }}" required>
+
+        <label for="segment">Segment</label>
+        <select id="segment" name="segment" required>
+            <option value="opener" {% if template.segment == 'opener' %}selected{% endif %}>Opener</option>
+            <option value="clicker" {% if template.segment == 'clicker' %}selected{% endif %}>Clicker</option>
+            <option value="raw" {% if template.segment == 'raw' %}selected{% endif %}>Raw</option>
+        </select>
+
+        <label for="template">Template</label>
+        <textarea id="template" name="template" rows="10" required>{{ template.template }}</textarea>
+
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" value="{{ template.date }}" required>
+
+        <button type="submit">Update Template</button>
+    </form>
+
+<!-- Include WYSIWYG Editor  -->
+     <script>
+  tinymce.init({
+    selector: 'textarea',
+    plugins: [
+      // Core editing features
+      'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+      // Your account includes a free trial of TinyMCE premium features
+      // Try the most popular premium features until Sep 12, 2024:
+      'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+    ],
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+    tinycomments_mode: 'embedded',
+    tinycomments_author: 'Author name',
+    mergetags_list: [
+      { value: 'First.Name', title: 'First Name' },
+      { value: 'Email', title: 'Email' },
+    ],
+    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+  });
+</script>
+
+    <!-- For CKEditor, use the following script instead -->
+  
+    <!-- <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('template', {
+            height: 500,
+        });
+    </script>
+     -->
+</body>
+
+</html>

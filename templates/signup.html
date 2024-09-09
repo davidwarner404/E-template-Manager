@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('/static/bg1.jpg');
+            background-size: cover;
+            /* Or contain */
+            background-position: left;
+            /* Or adjust as needed */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+
+        }
+
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 93%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        .error {
+            color: #d9534f;
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .additional-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .additional-text a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .additional-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Create Your Account</h2>
+        <form method="POST" action="{{ url_for('signup') }}">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                {{ form.username(class="form-control") }}
+                {% for error in form.username.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                {{ form.email(class="form-control") }}
+                {% for error in form.email.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                {{ form.confirm_password(class="form-control") }}
+                {% for error in form.confirm_password.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn") }}
+            </div>
+        </form>
+
+        <div class="additional-text">
+            Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

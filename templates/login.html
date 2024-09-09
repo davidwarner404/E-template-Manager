@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('/static/bg1.jpg');
+            background-size: cover;
+            /* Or contain */
+            background-position: left;
+            /* Or adjust as needed */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 93%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        .additional-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .additional-text a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .additional-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <form method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                {{ form.email(class="form-control") }}
+                {% for error in form.email.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn">Login</button>
+            </div>
+        </form>
+
+        <div class="additional-text">
+            Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a>
+        </div>
+    </div>
+
+</body>
+</html>

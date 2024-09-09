@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Template Manager</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>E-MailCraft</title>
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
     <style>
         /* Reset some basic elements */
         body,
@@ -25,6 +27,27 @@
             display: flex;
             flex-direction: row;
 
+            background-size: auto;
+            /* Or contain */
+            background-position: right;
+            /* Or adjust as needed */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+            height: 94vh;
+
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background-color: #002540;
+            color: white;
+            text-align: center;
+            padding: 2px;
+            width: 73%;
+            margin-left: 28%;
         }
 
         h1 {
@@ -51,9 +74,16 @@
             left: 0;
             height: 100vh;
             padding: 20px;
-            background-color: #fff;
+            background-color: #002540;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+
         }
 
         .left-panel form {
@@ -97,36 +127,45 @@
         /* Right Panel (Filter & Templates) */
         .right-panel {
             margin-left: 28%;
-            width: 70%;
-            padding: 20px;
+            width: 72%;
+            padding: 15px;
             padding-top: 0;
             padding-right: 0;
             display: flex;
             flex-direction: column;
             height: 90vh;
             overflow: hidden;
+
+
         }
 
         /* Filter Section */
         .filter-section {
-            width: 65vw;
+            width: 67%;
             position: fixed;
             top: 0;
+            right: 0;
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 10;
+            z-index: 100;
+            margin-top: 8px;
+            margin-right: 16px;
+            border-radius: 5px;
         }
 
         .filter-section form {
-            display: block;
-            flex-direction: column;
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+            align-items: center;
         }
 
         .filter-section form label {
             display: inline;
-            margin-bottom: 8px;
+
             font-weight: bold;
+            margin-right: 10px;
         }
 
         .filter-section form select,
@@ -141,7 +180,7 @@
         }
 
         .filter-section button {
-            align-self: flex-start;
+
             background-color: #28a745;
             color: white;
             padding: 10px 20px;
@@ -160,9 +199,9 @@
         .template-list {
             flex: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 22px;
             overflow-y: auto;
             margin-top: 80px;
         }
@@ -298,11 +337,22 @@
                 position: static;
                 height: auto;
                 margin-bottom: 20px;
+
             }
 
             .right-panel {
                 margin-left: 0;
                 width: 100%;
+            }
+
+            .filter-section {
+                margin-left: 0;
+                width: 90%;
+            }
+
+            footer {
+                width: 100%;
+
             }
 
             form button,
@@ -318,9 +368,13 @@
 <body>
 
     <div class="left-panel">
-        <h1>Email Template Manager</h1>
-
-        <form action="/upload" method="post">
+        <div></div>
+        <h1 style="color: whitesmoke;"><img src="/static/logo.png" alt="" style="width: 15%;  "> E-MailCraft</h1>
+        <form action="{{ url_for('logout') }}" method="POST" style="display:inline; position: relative;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" style="background-color: rgb(172, 42, 42); width: 100%; ">Logout</button>
+        </form>
+        <form id="uploadForm" method="POST">
             <label for="subject_line">Subject Line</label>
             <input type="text" id="subject_line" name="subject_line" required>
 
@@ -332,13 +386,14 @@
             </select>
 
             <label for="template">Template</label>
-            <textarea id="template" name="template" rows="6" required></textarea>
+            <textarea id="template" name="template" rows="2" required></textarea>
 
             <label for="date">Date</label>
             <input type="date" id="date" name="date" required>
-
-            <button type="submit">Upload Template</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" style="width: 100%;">Upload Template</button>
         </form>
+
     </div>
 
     <div class="right-panel">
@@ -369,13 +424,18 @@
                 <h3>{{ template.subject_line }}</h3>
                 <p><strong>Segment:</strong> {{ template.segment }}</p>
                 <p><strong>Date:</strong> {{ template.date }}</p>
+                {% for user in users %}
+                {% if user.id == template.added_by %}
+                <p><strong>Added By:</strong> {{ user.username }}</p>
+                {% endif %}
+                {% endfor %}
                 <p><strong>Template Preview:</strong></p>
-                <img src="{{ url_for('static', filename='thumbnails/' + template.thumbnail) }}" alt="Template Thumbnail"
+                <img src="{{ template.thumbnail }}" alt="Thumbnail Preview"
                     style="width:100%; height: 300px; border-radius: 8px; margin-bottom: 40px; cursor: pointer;"
                     onclick="enlargeImage(this.src)">
                 <div
                     style=" display: flex;justify-content: center; align-items:end; margin-top: 10px;  position: absolute; bottom: 10px;  right:10px; left: 17px;">
-                    <button onclick="showTemplate('{{template.id}}')">Show Template</button>
+                    <button onclick="showTemplate('{{template.id}}')">Show Code</button>
                     <button onclick="deleteTemplate('{{template.id}}')">Delete Template</button>
                     <a href="{{ url_for('edit_template', template_id=template.id) }}"><button>Edit Template</button></a>
                 </div>
@@ -399,6 +459,7 @@
     </div>
 
     <script>
+         const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         function showTemplate(id) {
             const popup = document.getElementById('popup');
             const templateContent = document.getElementById('template_content');
@@ -431,22 +492,44 @@
                 });
         }
 
-        function deleteTemplate(id) {
-            if (confirm('Are you sure you want to delete this template?')) {
-                fetch(`/template/${id}`, { method: 'DELETE' })
-                    .then(response => {
-                        if (response.ok) {
-                            location.reload();  // Reload the page to reflect changes
-                        } else {
-                            alert('Failed to delete template.');
-                        }
-                    })
-                    .catch(error => {
-                        alert('Error deleting template.');
-                        console.error('Error deleting template:', error);
-                    });
+        function deleteTemplate(templateId) {
+    const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // Show confirmation dialog
+    const confirmation = confirm("Are you sure you want to delete this template?");
+    
+    if (confirmation) {
+        // If the user confirms, proceed with the deletion
+        fetch(`/template/${templateId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf_token  // Include CSRF token in headers
             }
-        }
+        })
+        .then(response => {
+            if (response.status === 204) {
+                alert("Template deleted successfully.");
+                // Optionally, refresh the page or remove the deleted item from the DOM
+                location.reload(); // Reload the page to reflect the changes
+            } else {
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data && data.error) {
+                alert("Failed to delete template: " + data.error);
+            }
+        })
+        .catch(error => {
+            console.error("Error deleting template:", error);
+            alert("An error occurred. Please try again.");
+        });
+    } else {
+        // If the user cancels, do nothing
+        console.log("Deletion canceled.");
+    }
+}
 
         // Function to show the enlarged image
         function enlargeImage(src) {
@@ -464,16 +547,50 @@
         document.getElementById('closeImageModal').addEventListener('click', closeImageModal);
 
         function copyID(id) {
-    navigator.clipboard.writeText(id)
-        .then(() => {
-            alert('ID copied to clipboard!');
-        })
-        .catch(err => {
-            alert('Failed to copy ID.');
-            console.error('Error copying ID to clipboard:', err);
-        });
-}
+            navigator.clipboard.writeText(id)
+                .then(() => {
+                    alert('ID copied to clipboard!');
+                })
+                .catch(err => {
+                    alert('Failed to copy ID.');
+                    console.error('Error copying ID to clipboard:', err);
+                });
+        }
+
+        document.getElementById('uploadForm').onsubmit = function(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    const formData = new FormData(this);
+    const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrf_token
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Template uploaded successfully!");
+            // Optionally, you can reload the page or reset the form
+            location.reload(); // Reload the page to reflect the new template
+        } else {
+            alert("Failed to upload template.");
+        }
+    })
+    .catch(error => {
+        console.error("Error uploading template:", error);
+        alert("An error occurred. Please try again.");
+    });
+};
     </script>
+    <footer>
+        <p style="font-weight: bold;">&copy; Code by: <span style="color: #b92236;">D</span>-Velop Hub <span
+                style="color: #b92236;">❤</span></p>
+    </footer>
+    
 </body>
 
 </html>

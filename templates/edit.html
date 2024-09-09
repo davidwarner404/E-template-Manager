@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
     <title>Edit Template</title>
     <style>
         body {
@@ -36,18 +37,20 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
+            margin-top: 10px;
         }
 
         form input[type="text"],
         form select,
         form input[type="date"] {
-            width: 100%;
+            width: 97%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1rem;
             font-family: inherit;
+            
         }
 
         form button {
@@ -68,7 +71,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            font-size: 24px;
+            font-size: 50px;
             background: none;
             border: none;
             cursor: pointer;
@@ -76,11 +79,11 @@
         }
 
         .close-btn:hover {
-            color: #333;
+            color: #ca3636;
         }
 
         .close-btn::before {
-            content: "\00d7"; /* Unicode for cross (×) */
+            content: "\00d7 "; /* Unicode for cross (×) */
         }
     </style>
     <script src="https://cdn.tiny.cloud/1/ttq6ydbuh9xpr8knpqb3vy5o3e442u75xcoms2aky4m5mq51/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
@@ -91,6 +94,7 @@
     <h1>Edit Template</h1>
     <button class="close-btn" onclick="window.location.href='/'"></button>
     <form action="{{ url_for('update_template', template_id=template.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <label for="subject_line">Subject Line</label>
         <input type="text" id="subject_line" name="subject_line" value="{{ template.subject_line }}" required>
 
@@ -125,8 +129,8 @@
     tinycomments_mode: 'embedded',
     tinycomments_author: 'Author name',
     mergetags_list: [
-      { value: 'First.Name', title: 'First Name' },
-      { value: 'Email', title: 'Email' },
+      { value: '{{first_name}}', title: 'First Name' },
+      { value: '{{email}}', title: 'Email' },
     ],
     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
   });

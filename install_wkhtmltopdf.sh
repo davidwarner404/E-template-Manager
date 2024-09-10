@@ -4,7 +4,7 @@
 mkdir -p wkhtmltopdf_bin
 
 # Download the precompiled wkhtmltox binary (use the correct URL for the version)
-curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-3/wkhtmltox-0.12.6-3.archlinux-x86_64.pkg.tar.xz
+wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-3/wkhtmltox-0.12.6-3.archlinux-x86_64.pkg.tar.xz
 
 # Extract the tar.xz file
 tar -xJf wkhtmltopdf_bin/wkhtmltox.tar.xz -C wkhtmltopdf_bin --strip-components=1

@@ -1,1 +1,1 @@
-web: chmod +x install_wkhtmltopdf.sh && ./install_wkhtmltopdf.sh && gunicorn app:app
+web: ./install_wkhtmltopdf.sh && gunicorn app:app

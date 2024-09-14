@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Copy Firebase service account key to the /firebase directory in the container
-COPY firebase/e-template-manager-firebase-adminsdk-fn65x-4fbc7ba929.json /firebase/e-template-manager-firebase-adminsdk-fn65x-4fbc7ba929.json
+#COPY firebase/e-template-manager-firebase-adminsdk-fn65x-4fbc7ba929.json /firebase/e-template-manager-firebase-adminsdk-fn65x-4fbc7ba929.json
 
 # Install python-dotenv if necessary to load environment variables from .env file
 RUN pip install python-dotenv

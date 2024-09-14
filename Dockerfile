@@ -36,5 +36,5 @@ RUN pip install python-dotenv
 # Expose the required port for Flask
 EXPOSE 5000
 
-# Command to run the application using Gunicorn (non-root user)
-CMD ["python", "app.py"]
+# Run the app using Gunicorn (production WSGI server)
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]

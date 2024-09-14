@@ -10,6 +10,15 @@ RUN apt-get update && apt-get install -y \
     xvfb \
     && apt-get clean
 
+# Create a non-root user with user ID 10014
+RUN useradd -m -u 10014 appuser
+
+# Set the non-root user as the owner of the working directory
+RUN chown -R appuser /app
+
+# Switch to the non-root user
+USER 10014
+
 # Copy the application requirements and install Python dependencies
 COPY requirements.txt .
 
@@ -21,14 +30,11 @@ COPY . .
 # Copy Firebase service account key to the /firebase directory in the container
 COPY firebase/e-template-manager-firebase-adminsdk-fn65x-4fbc7ba929.json /firebase/e-template-manager-firebase-adminsdk-fn65x-4fbc7ba929.json
 
-# Copy .env file to the working directory
-COPY .env /app/.env
-
 # Install python-dotenv if necessary to load environment variables from .env file
 RUN pip install python-dotenv
 
 # Expose the required port for Flask
 EXPOSE 5000
 
-# Command to run your application
+# Command to run the application using Gunicorn (non-root user)
 CMD ["python", "app.py"]

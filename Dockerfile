@@ -37,4 +37,4 @@ RUN pip install python-dotenv
 EXPOSE 5000
 
 # Run the app using Gunicorn (production WSGI server)
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "app:app"]
